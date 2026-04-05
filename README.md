@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Python + SQLite School Management System
 
 This is a Python and SQLite version of the School Staff and Student Management System.
@@ -32,3 +33,7 @@ This is a Python and SQLite version of the School Staff and Student Management S
 - The app uses SQLite and creates `school.db` automatically when first run.
 - Admin users can manage students, staff, section assignments, fees, salaries, and room allocations.
 - Student users can view the available data.
+=======
+# school-management-system
+Flask based School Management System with student, staff, attendance and fee management.
+>>>>>>> 8ee4f922e2c2563107f8356bd13c156556ccfb7b
