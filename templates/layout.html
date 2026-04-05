@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>School Management System</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <div class="container header-inner">
+      <div>
+        <h1>School Management System</h1>
+        <p class="subtitle">College administration made simple: manage students, staff, fees, rooms, and schedules in one place.</p>
+      </div>
+      {% if session.get('user_id') %}
+      <nav>
+        <a href="{{ url_for('dashboard') }}" class="{{ 'active' if request.path == url_for('dashboard') else '' }}">Dashboard</a>
+        <a href="{{ url_for('students') }}" class="{{ 'active' if request.path == url_for('students') else '' }}">Students</a>
+        <a href="{{ url_for('staff') }}" class="{{ 'active' if request.path == url_for('staff') else '' }}">Staff</a>
+        <a href="{{ url_for('sections') }}" class="{{ 'active' if request.path == url_for('sections') else '' }}">Sections</a>
+        <a href="{{ url_for('fees') }}" class="{{ 'active' if request.path == url_for('fees') else '' }}">Fees</a>
+        <a href="{{ url_for('attendance') }}" class="{{ 'active' if request.path == url_for('attendance') else '' }}">Attendance</a>
+        {% if session.get('role') == 'admin' %}
+          <a href="{{ url_for('salaries') }}" class="{{ 'active' if request.path == url_for('salaries') else '' }}">Salaries</a>
+        {% endif %}
+        <a href="{{ url_for('rooms') }}" class="{{ 'active' if request.path == url_for('rooms') else '' }}">Rooms</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+      </nav>
+      {% endif %}
+    </div>
+  </header>
+  <main class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="message {{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+  <footer>
+    <div class="container">Built with Python, Flask, and SQLite</div>
+  </footer>
+</body>
+</html>

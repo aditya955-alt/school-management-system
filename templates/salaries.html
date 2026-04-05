@@ -1,0 +1,64 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="card">
+  <h2>Salary Management</h2>
+  <form method="post" class="card">
+    <input type="hidden" name="action" value="add">
+    <div class="form-row">
+      <div>
+        <label>Teacher</label>
+        <select name="staff_id" required>
+          <option value="">Select teacher</option>
+          {% for teacher in teachers %}
+          <option value="{{ teacher.id }}">{{ teacher.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div>
+        <label>Amount</label>
+        <input type="number" step="0.01" name="amount" required>
+      </div>
+      <div>
+        <label>Payment Date</label>
+        <input type="date" name="payment_date" required>
+      </div>
+      <div>
+        <label>Status</label>
+        <select name="status" required>
+          <option value="Paid">Paid</option>
+          <option value="Pending">Pending</option>
+        </select>
+      </div>
+    </div>
+    <input type="submit" value="Add Salary Record">
+  </form>
+  <table>
+    <thead>
+      <tr>
+        <th>Teacher</th>
+        <th>Amount</th>
+        <th>Payment Date</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for salary in salaries %}
+      <tr>
+        <td>{{ salary.teacher_name }}</td>
+        <td>{{ salary.amount }}</td>
+        <td>{{ salary.payment_date }}</td>
+        <td>{{ salary.status }}</td>
+        <td class="action-buttons">
+          <form method="post">
+            <input type="hidden" name="action" value="delete">
+            <input type="hidden" name="id" value="{{ salary.id }}">
+            <button type="submit">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

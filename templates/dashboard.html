@@ -1,0 +1,95 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="stats-grid">
+  <div class="stat-card">
+    <h3>Total Students</h3>
+    <p>{{ totals.students }}</p>
+  </div>
+  <div class="stat-card">
+    <h3>Total Staff</h3>
+    <p>{{ totals.staff }}</p>
+  </div>
+  <div class="stat-card">
+    <h3>Total Classes</h3>
+    <p>{{ totals.classes }}</p>
+  </div>
+  <div class="stat-card">
+    <h3>Pending Fees</h3>
+    <p>{{ totals.pending_fees }}</p>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Quick Links</h2>
+  <div class="button-grid">
+    <a class="button-link" href="{{ url_for('students') }}">Students</a>
+    <a class="button-link" href="{{ url_for('staff') }}">Staff</a>
+    <a class="button-link" href="{{ url_for('sections') }}">Sections</a>
+    <a class="button-link" href="{{ url_for('fees') }}">Fees</a>
+    {% if role == 'admin' %}
+      <a class="button-link" href="{{ url_for('salaries') }}">Salaries</a>
+    {% endif %}
+    <a class="button-link" href="{{ url_for('attendance') }}">Attendance</a>
+    <a class="button-link" href="{{ url_for('rooms') }}">Rooms</a>
+  </div>
+</div>
+
+<div class="card chart-card">
+  <h2>Students by Class</h2>
+  <canvas id="classChart" height="180"></canvas>
+</div>
+
+<div class="card chart-card">
+  <h2>Fee Status</h2>
+  <canvas id="feeChart" height="180"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const classData = {{ students_per_class | safe }};
+const feeData = {{ fees_by_status | safe }};
+
+if (document.getElementById('classChart')) {
+  new Chart(document.getElementById('classChart'), {
+    type: 'bar',
+    data: {
+      labels: classData.map(item => item.label),
+      datasets: [{
+        label: 'Students per Class',
+        data: classData.map(item => item.value),
+        backgroundColor: '#3f6ae5',
+        borderRadius: 12,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false }
+      },
+      scales: {
+        y: { beginAtZero: true }
+      }
+    }
+  });
+}
+
+if (document.getElementById('feeChart')) {
+  new Chart(document.getElementById('feeChart'), {
+    type: 'doughnut',
+    data: {
+      labels: feeData.map(item => item.label),
+      datasets: [{
+        data: feeData.map(item => item.value),
+        backgroundColor: ['#3f6ae5', '#f97316'],
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'bottom' }
+      }
+    }
+  });
+}
+</script>
+{% endblock %}

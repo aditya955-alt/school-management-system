@@ -1,0 +1,75 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="card">
+  <h2>Student Management</h2>
+  <div class="search-row">
+    <form method="get">
+      <input type="text" name="search" value="{{ search }}" placeholder="Search by name, roll, class, or email">
+      <input type="submit" value="Search">
+      {% if search %}
+      <a class="button-link secondary" href="{{ url_for('students') }}">Clear</a>
+      {% endif %}
+    </form>
+  </div>
+  {% if role == 'admin' %}
+  <form method="post" class="card">
+    <input type="hidden" name="action" value="add">
+    <div class="form-row">
+      <div>
+        <label>Name</label>
+        <input type="text" name="name" required>
+      </div>
+      <div>
+        <label>Roll Number</label>
+        <input type="text" name="roll_number" required>
+      </div>
+      <div>
+        <label>Class</label>
+        <input type="text" name="class_name" required>
+      </div>
+      <div>
+        <label>Section</label>
+        <input type="text" name="section" required>
+      </div>
+      <div>
+        <label>Email</label>
+        <input type="email" name="email" required>
+      </div>
+    </div>
+    <input type="submit" value="Add Student">
+  </form>
+  {% endif %}
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Roll</th>
+        <th>Class</th>
+        <th>Section</th>
+        <th>Email</th>
+        {% if role == 'admin' %}<th>Actions</th>{% endif %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for student in students %}
+      <tr>
+        <td>{{ student.name }}</td>
+        <td>{{ student.roll_number }}</td>
+        <td>{{ student.class_name }}</td>
+        <td>{{ student.section }}</td>
+        <td>{{ student.email }}</td>
+        {% if role == 'admin' %}
+        <td class="action-buttons">
+          <form method="post">
+            <input type="hidden" name="action" value="delete">
+            <input type="hidden" name="id" value="{{ student.id }}">
+            <button type="submit">Delete</button>
+          </form>
+        </td>
+        {% endif %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
